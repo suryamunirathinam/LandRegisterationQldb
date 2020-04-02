@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LandLedger</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+    <div class="jumbotron">
+    <h3>Land Registration </h3>
+    </div>
+    <form method="POST">
+        <div class="form-group">
+        Insert Person Records 
+            <br>
+        {% csrf_token %}
+        <input type="text" placeholder="FirstName" name="firstname">
+        <input type="text" placeholder="LastName" name="lastname">
+        <input type="textarea" placeholder="Address" name="address">
+        <input type="date" placeholder="DOB" name="dob">
+        <input type="text" placeholder="GovId" name="govid">
+        <input type="text" placeholder="GovIDType" name="govidtype">
+        <button type="submit" name="post_person" class="btn btn-primary" >Submit</button>
+        </div>
+    </form>
+
+    
+
+    <form method="POST">
+        <div class="form-group">
+        Insert Land Records 
+            <br>
+        {% csrf_token %}
+    
+        <input type="text" placeholder="Survey No" name="surveyno">
+        <input type="text" placeholder="Type of land" name="landtype">
+        <input type="number" placeholder="Sq Feet" name="sqfeet">
+      
+        <button type="submit" name="post_land" class="btn btn-primary">Submit</button></div>
+    </form>
+
+    <form method="POST">
+        <div class="form-group">
+        Get Personid from Govid
+            <br>
+        {% csrf_token %}
+    
+        <input type="text" placeholder="Gov Id" name="get_govid">
+        
+      
+        <button type="submit" name="get_personid" class="btn btn-primary">Get Id</button></div>
+        
+    </form>
+    {% for id in person_id %}
+    <p>{{id}}</p>
+    {% endfor%} 
+    <p>{{message}}</p> 
+    <form method="POST">
+        <div class="form-group">
+        Get current owner of the land
+            <br>
+        {% csrf_token %}
+    
+        <input type="text" placeholder="Survey No" name="post_surveyno">
+        
+      
+        <button type="submit" name="get_currentowner" class="btn btn-primary">Get Owner </button></div>
+        
+    </form>
+    {% for id in ownerdata %}
+    <p>{{id}}</p>
+    {% endfor%} 
+</body>
+</html>

@@ -20,15 +20,26 @@ def find_person_from_document_id(transaction_executor, document_id):
 def find_owner_for_land(transaction_executor, surveyno):
     
     logger.info('Finding owner for land with surveyno: {}.'.format(surveyno))
-    query ="SELECT r.Owners ,q.data.FirstName,q.data.LastName FROM LandRegistration AS r inner join _ql_committed_Person as q on r.Owners.PersonId=q.metadata.id WHERE r.SurveyNO=?" 
-    cursor = transaction_executor.execute_statement(query, convert_object_to_ion(surveyno))
+    query ="SELECT r.Owners ,q.data.FirstName,q.data.LastName FROM LandRegistration AS r inner join _ql_committed_Person as q on r.Owners.PersonId=q.metadata.id WHERE r.SurveyNO='{}'".format(surveyno) 
+    cursor = transaction_executor.execute_statement(query)
+    
     try:
         return cursor
     except StopIteration:
         logger.error('No primary owner registered for this land .')
         return None
     
-
+def find_person_land_bygovid(transaction_executor,govid):
+    logger.info('Finding land info with owner for land with GovId: {}.'.format(govid))
+    query="SELECT l.*,q.data.FirstName,q.data.LastName from LandRegistration as l inner join _ql_committed_Person as q on l.Owners.PersonId=q.metadata.id where q.data.GovId = '{}'".format(govid)
+    cursor = transaction_executor.execute_statement(query)
+    print(cursor)
+    print(query)
+    try:
+        return cursor
+    except StopIteration:
+        logger.error('No primary owner registered for this land .')
+        return None
 
 
 def update_land_registration(transaction_executor, surveyno, document_id):

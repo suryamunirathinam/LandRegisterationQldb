@@ -162,6 +162,7 @@ def get_document_ids(transaction_executor,value):
     cursor = transaction_executor.execute_statement(query)
     print(cursor)
     list_of_ids = list(map(lambda table: table.get('id'), cursor))
+    print(list_of_ids)
     return list_of_ids
 
 

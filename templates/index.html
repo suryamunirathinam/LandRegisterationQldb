@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LandLedger</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
@@ -68,8 +69,120 @@
         <button type="submit" name="get_currentowner" class="btn btn-primary">Get Owner </button></div>
         
     </form>
-    {% for id in ownerdata %}
-    <p>{{id}}</p>
-    {% endfor%} 
+    {% for data in ownerdata %}
+    <p>{{data}}</p>
+    {% endfor%}
+    
+    
+    <form method="POST">
+        <div class="form-group">
+        Get Land and Person Info from Govid
+            <br>
+        {% csrf_token %}
+    
+        <input type="text" placeholder="Gov Id" name="person_govid">
+        
+      
+        <button type="submit" name="get_personland" class="btn btn-primary">Get Info</button></div>
+        
+    </form>
+    {% if personland_data %}
+        <table id="example" class="display" style="width:100%">
+            <thead>
+                <tr>
+                    <th>FirstName</th>
+                    <th>LastName</th>
+                    <th>OwnerId</th>
+                    <th>Surveyno</th>
+                    <th>LandRegNo</th>
+                    <th>State</th>
+                    <th>City</th>
+                    <th>MarketValue</th>
+                </tr>
+            </thead>
+            <tbody>
+            
+                
+                {% for id in personland_data %}
+                    <tr>{% for each in id %}
+                        <td>{{each}}</td>
+                    {% endfor %}</tr>
+                {% endfor%}
+                
+
+            
+            </tbody>
+        </table>
+    {% endif %}
+    
+    <form method="POST">
+        <div class="form-group">
+        Register Land for a person
+            <br>
+        {% csrf_token %}
+        <input type="text" placeholder="SurveyNO" name="reg_surveyno" required>
+        <input type="text" placeholder="LandRegNO" name="reg_landno" required>
+        <input type="text" placeholder="State" name="reg_state" required>
+        <input type="text" placeholder="City" name="reg_city" required>
+        <input type="text" placeholder="MarketValue" name="reg_value" required>
+        <input type="text" placeholder="PersonId" name="reg_personid" required>
+        <button type="submit" name="post_landreg" class="btn btn-primary" >Submit</button>
+        </div>
+    </form>    
+
+<p>{{Reg_Status}}</p> 
+
+    <!-- upadte Owner of a land  -->
+
+    <form method="POST">
+        <div class="form-group">
+        Update owner of the land by using PersonID
+            <br>
+        {% csrf_token %}
+        <input type="text" placeholder="SurveyNO" name="upd_surveyno" required>
+        
+        <input type="text" placeholder="Person ID" name="upd_personid" required>
+         
+        <button type="submit" name="post_updland" class="btn btn-primary" >Submit</button>
+        </div>
+    </form>   
+    {{upd_personland}}
+
+<!-- Get Revision History  -->
+<form method="POST">
+    <div class="form-group">
+    Get Revision History of a Land 
+        <br>
+    {% csrf_token %}
+    <input type="text" placeholder="SurveyNO" name="rev_surveyno" required>
+    
+    
+     
+    <button type="submit" name="post_rev" class="btn btn-primary" >Submit</button>
+    </div>
+    <table class="table">
+        
+        <tbody>{% for id in result %}
+            <tr>{% for each in id %}
+                
+                <td>{{each}}</td>
+                {% endfor %}
+            </tr>
+               {% endfor%}
+                
+        </tbody>
+    </table>
+
+</form>   
 </body>
+<script src="https://code.jquery.com/jquery-3.3.1.js">
+    
+</script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script>
+
+$('#example').dataTable( {
+  "searching": false
+} );
+</script>
 </html>

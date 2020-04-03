@@ -34,19 +34,19 @@ def format_date_time(date_time):
 
 def previous_owners(transaction_executor, surveyno):
  
-    person_ids = get_document_ids(transaction_executor, Constants.LAND_REGISTRATION_TABLE_NAME, 'SurveyNO', surveyno)
+    # person_ids = get_document_ids(transaction_executor, Constants.LAND_REGISTRATION_TABLE_NAME, 'SurveyNO', surveyno)
 
-    todays_date = datetime.utcnow() - timedelta(seconds=1)
-    three_months_ago = todays_date - timedelta(days=90)
-    query = 'SELECT data.Owners, metadata.version FROM history({}, {}, {}) AS h WHERE h.metadata.id = ?'.\
-        format(Constants.LAND_REGISTRATION_TABLE_NAME, format_date_time(three_months_ago),
-               format_date_time(todays_date))
-
-    for ids in person_ids:
-        logger.info("Querying the 'LandRegistration' table's history using surveyno: {}.".format(surveyno))
-        cursor = transaction_executor.execute_statement(query, ids)
-        if not (print_result(cursor)) > 0:
-            logger.info('No modification history found within the given time frame for document ID: {}'.format(ids))
+    # todays_date = datetime.utcnow() - timedelta(seconds=1)
+    # three_months_ago = todays_date - timedelta(days=90)
+    # query = 'SELECT data.Owners, metadata.version FROM history({}, {}, {}) AS h WHERE h.metadata.id = ?'.\
+    #     format(Constants.LAND_REGISTRATION_TABLE_NAME, format_date_time(three_months_ago),
+    #            format_date_time(todays_date))
+    query= "select h.metadata,q.data.FirstName,q.data.LastName from history(LandRegistration) as h inner join _ql_committed_Person as q on h.data.Owners.PersonId=q.metadata.id where h.data.SurveyNO='{}'".format(surveyno)
+    
+    logger.info("Querying the 'LandRegistration' table's history using surveyno: {}.".format(surveyno))
+    cursor = transaction_executor.execute_statement(query)
+    return cursor
+        
 
 
 if __name__ == '__main__':

@@ -19,7 +19,7 @@ class Constants:
     """
     Constant values used throughout this tutorial.
     """
-    LEDGER_NAME = "landledger"
+    LEDGER_NAME = "landledger2"
 
     LAND_REGISTRATION_TABLE_NAME = "LandRegistration"
     LAND_TABLE_NAME = "Land"
